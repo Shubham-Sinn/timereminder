@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Time Reminder Options</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Configuration</h1>
+    
+    <div class="setting-group">
+      <label for="limitMinutes">Locking Period (Minutes):</label>
+      <input type="number" id="limitMinutes" min="1" max="1440">
+      <p class="desc">How long you can browse target websites before they are blocked.</p>
+    </div>
+
+    <div class="setting-group">
+      <label for="resetMinutes">Reset Threshold (Minutes):</label>
+      <input type="number" id="resetMinutes" min="1" max="1440">
+      <p class="desc">How long you must stay away from target websites for the timer to reset.</p>
+    </div>
+
+    <div class="setting-group">
+      <label>Target Websites:</label>
+      <div class="input-row">
+        <input type="text" id="newSite" placeholder="e.g. reddit.com">
+        <button id="addSiteBtn">Add</button>
+      </div>
+      <ul id="siteList"></ul>
+    </div>
+
+    <button id="saveBtn">Save Configuration</button>
+    <div id="status"></div>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>
