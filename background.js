@@ -111,8 +111,42 @@ async function updateBadge() {
   const config = await getConfig();
   const now = Date.now();
   
+  const canvas = new OffscreenCanvas(16, 16);
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  
+  ctx.clearRect(0, 0, 16, 16);
+
+  ctx.fillStyle = '#0f172a';
+  ctx.beginPath();
+  ctx.moveTo(3, 2);
+  ctx.lineTo(13, 2);
+  ctx.lineTo(8, 7);
+  ctx.lineTo(13, 14);
+  ctx.lineTo(3, 14);
+  ctx.lineTo(8, 7);
+  ctx.closePath();
+  ctx.fill();
+
+  if (!state.currentActiveDomain) {
+      ctx.strokeStyle = '#ef4444'; // Red cross
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      
+      ctx.beginPath();
+      ctx.moveTo(5, 5);
+      ctx.lineTo(11, 11);
+      ctx.moveTo(11, 5);
+      ctx.lineTo(5, 11);
+      ctx.stroke();
+      
+      const imageData = ctx.getImageData(0, 0, 16, 16);
+      chrome.action.setIcon({ imageData: imageData });
+      chrome.action.setBadgeText({ text: "" });
+      return;
+  }
+  
   let totalMs = 0;
-  if (state.currentActiveDomain && state.domainData[state.currentActiveDomain]) {
+  if (state.domainData[state.currentActiveDomain]) {
     totalMs = state.domainData[state.currentActiveDomain].accumulatedMs;
     if (state.sessionStart !== null) {
       totalMs += (now - state.sessionStart);
@@ -125,22 +159,6 @@ async function updateBadge() {
   if (currentActiveTabId && tabUnlockPercentages[currentActiveTabId] !== undefined) {
       percentage = tabUnlockPercentages[currentActiveTabId];
   }
-  
-  const canvas = new OffscreenCanvas(16, 16);
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  
-  ctx.clearRect(0, 0, 16, 16);
-  
-  ctx.fillStyle = '#0f172a';
-  ctx.beginPath();
-  ctx.moveTo(3, 2);
-  ctx.lineTo(13, 2);
-  ctx.lineTo(8, 7);
-  ctx.lineTo(13, 14);
-  ctx.lineTo(3, 14);
-  ctx.lineTo(8, 7);
-  ctx.closePath();
-  ctx.fill();
   
   ctx.beginPath();
   ctx.roundRect(0, 6, 16, 4, 2);
